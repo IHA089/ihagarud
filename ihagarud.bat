@@ -99,7 +99,6 @@ echo ) >> !PFP!\!gpath!
 echo endlocal >> !PFP!\!gpath!
 
 python "!PFP!\!kpath!"
-refreshenv
 echo "type `ihagarud` any where in command prompt."
 
 goto :EOF
@@ -115,7 +114,6 @@ start /wait python_installer.exe /quiet InstallAllUsers=1 PrependPath=1 Include_
 del python_installer.exe
 del download.ps1
 echo Python 3.9 is installed successfully. Open a new cmd and type python --version
-refreshenv
 goto :EOF
 
 
