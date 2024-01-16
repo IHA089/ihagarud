@@ -3,7 +3,7 @@ import sys
 import ctypes
 import shutil
 import platform
-import requests
+import urllib.request
 
 def is_admin():
     system_platform = platform.system()
@@ -65,7 +65,7 @@ def _real_getter(ENSTR):
 
 def _networkconnection(red):
     try:
-        requests.get("https://iha089.org.in")
+        urllib.request.urlopen("https://iha089.org.in")
     except:
         if osci == "linux":
             print("{}No Internet Connection".format(red))
@@ -142,10 +142,14 @@ def _toollist(red):
     _networkconnection(red)
     tool_list = "6pcH7H3N6XbM6Y4G6Eac6Z6V6gfL7u7o6N5I6Xar6m1E7p3b6Bck6Rbi6N6T6QaJ6cfq6y1u7L7O6w5T6A9Z6a6Z6Kav6Q1S6efi6e8u6v9T6t7J6A1D6Xfu6U9r7t7s6o5o6i6S6sao6afg6N1S6m9O7H7B6fae6r5B6P6u6ufX6C1e6K9n6Y8q6F5o6Qfs6v1k6d9h7l7Z6v5I6Dav6JfW6X6N6w1m6p9X6B8m6M7b6ofA6i1h6Z9X6H6F6pfq6g1r7a7o6j5Z6c9c6KaB6s6N6Bfv6j1Y6i9S6R8Y7r7I6a7R6GfX6q1g7r7g6v5R6w9c6vaN6c6C6I1H6KfH6g8x6z5x6j7g7Z7K2ifp6LdN6M1V6a9S6Cev2JfW6T3s6ofd6oei7p4c7R2q6Xfq6xcb6X5O7u2c2Tev7u4D7A8k7d4h"
     list_ul = _real_getter(_d_controler("raw"))+_real_getter(tool_list)
-    req = requests.get(list_ul)
+    
+
+    
     try:
-        if(req.status_code == 200):
-            text = req.text
+        make_req = urllib.request.urlopen(list_ul)
+        if make_req.status == 200:
+            text = make_req.read()
+            text = str(text, 'utf-8')
             krk = text.split("\n")
             for lines in krk:
                 if lines == "":
@@ -158,7 +162,7 @@ def _toollist(red):
                     print(gtkst)
         else:
             print("IHA089 ::: Server Down")
-    except:
+    except urllib.error.URLError:
         if osci == "linux":
             print("{} No Internet Connection".format(red))
         elif osci == "window":
@@ -170,10 +174,11 @@ def _check_support(toolname, red, osci):
     _networkconnection(red)
     tool_list = "6pcH7H3N6XbM6Y4G6Eac6Z6V6gfL7u7o6N5I6Xar6m1E7p3b6Bck6Rbi6N6T6QaJ6cfq6y1u7L7O6w5T6A9Z6a6Z6Kav6Q1S6efi6e8u6v9T6t7J6A1D6Xfu6U9r7t7s6o5o6i6S6sao6afg6N1S6m9O7H7B6fae6r5B6P6u6ufX6C1e6K9n6Y8q6F5o6Qfs6v1k6d9h7l7Z6v5I6Dav6JfW6X6N6w1m6p9X6B8m6M7b6ofA6i1h6Z9X6H6F6pfq6g1r7a7o6j5Z6c9c6KaB6s6N6Bfv6j1Y6i9S6R8Y7r7I6a7R6GfX6q1g7r7g6v5R6w9c6vaN6c6C6I1H6KfH6g8x6z5x6j7g7Z7K2ifp6LdN6M1V6a9S6Cev2JfW6T3s6ofd6oei7p4c7R2q6Xfq6xcb6X5O7u2c2Tev7u4D7A8k7d4h"
     list_ul = _real_getter(_d_controler("raw"))+_real_getter(tool_list)
-    req = requests.get(list_ul)
     try:
-        if(req.status_code == 200):
-            text = req.text
+        make_req = urllib.request.urlopen(list_ul)
+        if make_req.status == 200:
+            text = make_req.read()
+            text = str(text, 'utf-8')
             krk = text.split("\n")
             epic=0
             for lines in krk:
@@ -196,7 +201,7 @@ def _check_support(toolname, red, osci):
                 sys.exit(0)
         else:
             print("IHA089 ::: Server Down")
-    except Exception as e:
+    except urllib.error.URLError:
         if osci == "linux":
             print("{} No Internet Connection".format(red))
         elif osci == "window":
@@ -283,18 +288,19 @@ def _tool_cloner(tool_data, red, rem, osci, dir_path, blue, file_path, main_path
     archive_ui = _real_getter(cloner1)+tool_data+_real_getter(cloner2)
     try:
         print("Getting file size...",end='\r')
-        response = requests.get(archive_ui)
+        make_req = urllib.request.urlopen(archive_ui)
     except KeyboardInterrupt:
         print("Exit...")
     
-    if response.status_code == 200:
+    if make_req.status == 200:
         try:
-            file_size = int(response.headers.get('Content-Length'))
+            file_size = int(make_req.headers.get('Content-Length'))
         except TypeError:
-            response = requests.get(archive_ui)
-            file_size = int(response.headers.get('Content-Length'))
+            make_req = urllib.request.urlopen(archive_ui)
+            file_size = int(make_req.headers.get('Content-Length'))
         except:
             print("Please try again!!!")
+            exit()
         sise = _convert_size(file_size)
         if osci == "linux":
             print("Size : {}{}{}                               ".format(red,str(sise),rem))
@@ -304,15 +310,17 @@ def _tool_cloner(tool_data, red, rem, osci, dir_path, blue, file_path, main_path
             ctypes.windll.kernel32.SetConsoleTextAttribute(handle, 0x0001 | 0x0002 | 0x0004 | 0x0008)
 
         block_size = 1024  
-
         save_path = f"{dir_path}{tool_data}.zip"
         try:
+            progress = 0
             with open(save_path, 'wb') as file:
-                progress = 0
-                for data in response.iter_content(block_size):
+                while True:
+                    data = make_req.read(block_size)
+                    if not data:
+                        break
                     file.write(data)
                     progress += len(data)
-                    percent = (progress / file_size) * 100
+                    percent = (progress/file_size)*100
                     if osci == "linux":
                         print(f"Downloaded: {progress}/{file_size} bytes ({percent:.2f}%)", end='\r')
                         print("`{}{}{}` downloaded successfully!            ".format(blue,tool_data,rem))
@@ -377,12 +385,12 @@ def _tool_updater(tool_data, dir_path, osci):
     archive_ui = _real_getter(cloner1)+tool_data+_real_getter(cloner2)
     try:
         print("Getting update file size...",end='\r')
-        response = requests.get(archive_ui)
+        make_req = urllib.request.urlopen(archive_ui)
     except KeyboardInterrupt:
         print("Exit...")
     
-    if response.status_code == 200:
-        file_size = int(response.headers.get('Content-Length'))
+    if make_req.status == 200:
+        file_size = int(make_req.headers.get('Content-Length'))
         sise = _convert_size(file_size)
         if osci == "linux":
             print("Size : {}{}{}                               ".format(red,str(sise),rem))
@@ -417,7 +425,7 @@ def _tool_updater(tool_data, dir_path, osci):
         print("Failed to update [{tool_data}]")
         exit()
 
-def _update_check(toolname):
+def _update_check(toolname, dir_path):
     path = "{}{}/{}-main/.version".format(dir_path, toolname, toolname)
     ff = open(path, 'r')
     kd = ff.readline()
@@ -426,8 +434,9 @@ def _update_check(toolname):
     cks2 = "2Wfq6fdo6J1b6i9e6teM2qfb2meW7c6j6u5X7W2K7X3J6X9V6ffB6OeT"
     ul = _real_getter(cks1)+toolname+_real_getter(cks2)
     try:
-        gkg = requests.get(ul)
-        kd1 = gkg.text
+        gkg = urllib.request.urlopen(ul)
+        kd1 = gkg.read()
+        kd1 = str(kd1,'utf-8')
         kd1 = kd1.replace("\n","")
         if kd1 == kd:
             print("{} : No Update Found".format(toolname))
@@ -497,7 +506,7 @@ def _Handler():
                 exit()
         elif sys.argv[1] == "update" or sys.argv[1] == "Update":
             try:
-                _update_check(sys.argv[2])
+                _update_check(sys.argv[2], dir_path)
             except IndexError:
                 print("Error: provide tool name which u want to install")
                 if osci == "linux":
