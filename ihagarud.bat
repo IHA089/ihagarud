@@ -62,27 +62,16 @@ if %errorlevel% neq 0 (
     call :PYTHON_GET
 )
 
-where pip >nul 2>&1
-if %errorlevel% neq 0 (
-    echo Pip is not installed. Installing pip...
-    call :INSTALL_PIP
-)
-
-python -c "import requests" >nul 2>&1
-if %errorlevel% neq 0 (
-    echo The requests library is not installed. Installing requests...
-    pip install requests
-)
 
 set "kpath=ihaahi/run.py"
 set "cpath=ihaahi/runner.py"
 set "ppth=ihagarud.bat"
 set "gpath=ihaahi/IHA089/ihagarud.bat"
-echo import requests > !PFP!\!kpath!
+echo import urllib.request > !PFP!\!kpath!
 ::change this link. set the runner.py link here
-echo req=requests.get("https://raw.githubusercontent.com/IHA089/ihagarud/main/ihagarud.py") >> !PFP!\!kpath!
+echo req=urllib.request.urlopen("https://raw.githubusercontent.com/IHA089/ihagarud/main/ihagarud.py") >> !PFP!\!kpath!
 echo jt=open("!PFP!\!cpath!","w") >> !PFP!\!kpath!
-echo jt.write(req.text) >> !PFP!\!kpath!
+echo jt.write(req.read()) >> !PFP!\!kpath!
 echo jt.close() >> !PFP!\!kpath!
 echo @echo off > !PFP!\!gpath!
 echo setlocal enabledelayedexpansion >> !PFP!\!gpath!
@@ -110,8 +99,8 @@ echo ) >> !PFP!\!gpath!
 echo endlocal >> !PFP!\!gpath!
 
 python "!PFP!\!kpath!"
-
-echo "type `ihagarud` any where from command prompt."
+refreshenv
+echo "type `ihagarud` any where in command prompt."
 
 goto :EOF
 
@@ -126,13 +115,8 @@ start /wait python_installer.exe /quiet InstallAllUsers=1 PrependPath=1 Include_
 del python_installer.exe
 del download.ps1
 echo Python 3.9 is installed successfully. Open a new cmd and type python --version
+refreshenv
 goto :EOF
 
-:INSTALL_PIP
-echo Installing pip...
-python -m ensurepip
-echo Pip is installed successfully.
-goto :EOF
-::python !PYT!
 
 endlocal
