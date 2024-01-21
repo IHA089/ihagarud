@@ -294,10 +294,10 @@ def _tool_cloner(tool_data, red, rem, osci, dir_path, blue, file_path, main_path
     
     if make_req.status == 200:
         try:
-            file_size = int(make_req.headers.get('Content-Length'))
+            file_size = int(make_req.heade('Content-Length'))
         except TypeError:
             make_req = urllib.request.urlopen(archive_ui)
-            file_size = int(make_req.headers.get('Content-Length'))
+            file_size = int(make_req.header('Content-Length'))
         except:
             print("Please try again!!!")
             exit()
