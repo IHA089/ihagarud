@@ -294,10 +294,10 @@ def _tool_cloner(tool_data, red, rem, osci, dir_path, blue, file_path, main_path
     
     if make_req.status == 200:
         try:
-            file_size = int(make_req.header('Content-Length'))
+            file_size = int(make_req.getheader('Content-Length'))
         except TypeError:
             make_req = urllib.request.urlopen(archive_ui)
-            file_size = int(make_req.header('Content-Length'))
+            file_size = int(make_req.getheader('Content-Length'))
         except:
             print("Please try again!!!")
             exit()
@@ -390,7 +390,7 @@ def _tool_updater(tool_data, dir_path, osci):
         print("Exit...")
     
     if make_req.status == 200:
-        file_size = int(make_req.header('Content-Length'))
+        file_size = int(make_req.getheader('Content-Length'))
         sise = _convert_size(file_size)
         if osci == "linux":
             print("Size : {}{}{}                               ".format(red,str(sise),rem))
