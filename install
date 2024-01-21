@@ -1,0 +1,13 @@
+#!/bin/bash
+if [ "$(id -u)" -eq 0 ]; then
+    echo -e '#!/bin/bash\nif [ "$(id -u)" -eq 0 ]; then\n    if [ "$1" = "about" ] || [ "$1" = "About" ]; then\n        python3 /usr/share/ihaahi/ihagarud.py about\n    elif [ "$1" = "help" ] || [ "$1" = "Help" ]; then\n        python3 /usr/share/ihaahi/ihagarud.py help\n    elif [ "$1" = "install" ] || [ "$1" = "Install" ]; then\n        python3 /usr/share/ihaahi/ihagarud.py install $2\n    elif [ "$1" = "tools" ] || [ "$1" = "Tools" ]; then\n        python3 /usr/share/ihaahi/ihagarud.py tools\n    elif [ "$1" = "toollist" ] || [ "$1" = "Toollist" ]; then\n        python3 /usr/share/ihaahi/ihagarud.py toollist\n    elif [ "$1" = "update" ] || [ "$1" = "Update" ]; then\n        python3 /usr/share/ihaahi/ihagarud.py update $2\n    elif [ "$1" = "uninstall" ] || [ "$1" = "Uninstall" ]; then\n        python3 /usr/share/ihaahi/ihagarud.py uninstall $2\n    elif [ "$1" = "version" ] || [ "$1" = "Version" ]; then\n        python3 /usr/share/ihaahi/ihagarud.py version $2\n    else\n        python3 /usr/share/ihaahi/ihagarud.py\n    fi\nelse\n    echo "iha is not running with root privileges."\n    echo "Please run with sudo"\nfi' > /usr/local/bin/ihagarud
+    chmod +x /usr/local/bin/ihagarud
+    dire="/usr/share/ihaahi"
+    if [ ! -d "$dire" ]; then
+        sudo mkdir -p "$dire"
+    fi
+    rm /usr/share/ihaahi/ihagarud.py > /dev/null 2>&1
+    python -c "import urllib.request; req = urllib.request.urlopen('https://raw.githubusercontent.com/IHA089/ihagarud/main/ihagarud.py'); read_data = req.read(); read_data = str(read_data, 'utf-8'); ff = open('/usr/share/ihaahi/ihagarud.py','a'); spl = read_data.split('\n'); [ff.write(line + '\n') for line in spl]; ff.close()"
+else
+    echo "Script is not running with root privileges. Please run with sudo or as root."
+fi
