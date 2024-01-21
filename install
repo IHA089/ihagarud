@@ -8,6 +8,7 @@ if [ "$(id -u)" -eq 0 ]; then
     fi
     rm /usr/share/ihaahi/ihagarud.py > /dev/null 2>&1
     python -c "import urllib.request; req = urllib.request.urlopen('https://raw.githubusercontent.com/IHA089/ihagarud/main/ihagarud.py'); read_data = req.read(); read_data = str(read_data, 'utf-8'); ff = open('/usr/share/ihaahi/ihagarud.py','a'); spl = read_data.split('\n'); [ff.write(line + '\n') for line in spl]; ff.close()"
+    echo "type `ihagarud` for use it"
 else
     echo "Script is not running with root privileges. Please run with sudo or as root."
 fi
